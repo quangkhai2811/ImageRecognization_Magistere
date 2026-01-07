@@ -41,25 +41,26 @@ class Reseau:
         A_prev = activations[self.nb_couches-1]
         Z = np.dot(A_prev, self.poids)
 
-    def descenteGradient(self, data_entrainement):
+    def descenteGradient(self, data_entrainement, nb_iterations):
         #entrainement du réseau sur un jeu de donnée
         (xs_entrainement, ys_entrainement) = data_entrainement
+        
+        for _ in range(nb_iterations):
+            #calcul du gradient 
+            gradient = [np.zeros(w.shape) for w in self.poids]
+            for x in xs_entrainement:
+                for y in ys_entrainement:
+                    self.forwardProp(x)
+                    new_gradient = self.backProp(y)
+                    gradient = [gradient[n] + new_gradient[n] for n in len(self.tailles_couches)]
 
-        #calcul du gradient 
-        gradient = [np.zeros(w.shape) for w in self.poids]
-        for x in xs_entrainement:
-            for y in ys_entrainement:
-                self.forwardProp(x)
-                new_gradient = self.backProp(x, y)
-                gradient = [gradient[n] + new_gradient[n] for n in len(self.tailles_couches)]
-
-        #mise à jour des poids
-        self.poids = [self.poids[n] - self.eta * gradient[n] for n in range(len(self.tailles_couches))]
+            #mise à jour des poids
+            self.poids = [self.poids[n] - self.eta * gradient[n] for n in range(len(self.tailles_couches))]
         
         
 
 
-    def backProp(self, x, y):
+    def backProp(self, y):
         #renvoie le gradient de la fonction de cout (liste de np array de meme dim que self.poids)
         gradient = [np.zeros(w.shape) for w in self.poids]
         
