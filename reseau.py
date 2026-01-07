@@ -12,8 +12,8 @@ class Reseau:
         self.eta = eta #taux d'apprentissage
 
 
-    def forwardProp(self, x):
-        self.activations[0][:-1] = x
+    def forwardProp(self, data):
+        self.activations[0][:-1] = data
         for i in range(self.nb_couches-1):
             self.z[i+1] = np.dot(self.poids[i+1], self.activations[i])
             self.activations[i+1][:-1] = self.fonctionActivation(self.z[i+1])
