@@ -16,7 +16,7 @@ class Reseau:
         self.activations[0][:-1] = data
         for i in range(self.nb_couches-1):
             self.z[i+1] = np.dot(self.poids[i+1], self.activations[i])
-            self.activations[i+1][:-1] = self.fonctionActivation(self.z[i+1])
+            self.activations[i+1][:-1] = self.fctActivation(self.z[i+1])
 
     def forwardProp2(self, data):
         #renvoie résultat du réseau quand on met data en input (nombre compris entre 0 et 1)
@@ -75,17 +75,17 @@ class Reseau:
 
 
         
-    def fonctionActivation(self, z):
+    def fctActivation(self, z):
         return 1.0/(1.0+np.exp(-z)) #sigmoide
     
     def deriveeActivation(self, z):
-        return self.fonctionActivation(z)*(1-self.fonctionActivation(z))
+        return self.fctActivation(z)*(1-self.fctActivation(z))
 
-    def fonctionCout(self, x, y):
+    def fctCout(self, y, y_attendu):
         #erreur quadratique
-        return sum([(x[i]-y[i])**2 for i in range(len(x))])*0.5
+        return sum([(y[i]-y_attendu[i])**2 for i in range(len(y))])*0.5
 
-    def deriveeCout(self, x, y):
-        return np.ndarray([x[i]-y[i] for i in range(len(x))])
+    def deriveeCout(self, y, y_attendu):
+        return np.ndarray([y[i]-y_attendu[i] for i in range(len(y))])
 
 
